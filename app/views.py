@@ -41,8 +41,26 @@ def create_account():
     cur = conn.cursor()
     cur.execute('''INSERT INTO users(email, username, password, role) VALUES(%s,%s, %s, %s)''', (input_email, input_user, input_password, role))
     conn.commit()
-    print(role);
+    cur.close()
+    conn.close()
     if role == '1':
         return render_template('truckerHome.html')
     else:
         return render_template('distributorHome.html')
+
+@app.route("/distributor_post", methods=['POST'])
+def distributor_post():
+    job_title=request.form['jobTitle']
+    job_description=request.form['jobDescription']
+    pickup_location=request.form['pickupLocation']
+    dropoff_location=request.form['dropoffLocation']
+    pickup_date=request.form['pickupDate']
+    dropoff_date=request.form['dropoffDate']
+    delivery_instructions=request.form['deliveryInstructions']
+    conn = mysql.connector.connect(user='cs340_piccirim', password='1946', host='classmysql.engr.oregonstate.edu', database='cs340_piccirim')
+    cur = conn.cursor()
+    cur.execute('''INSERT INTO jobpost(title, description, pickupDate, dropoffDate, pickupLocation, dropoffLocation, deliveryInstructions) VALUES(%s, %s, %s, %s, %s, %s, %s)''', (job_title, job_description, pickup_date, dropoff_date, pickup_location, dropoff_location, delivery_instructions))
+    conn.commit()
+    cur.close()
+    conn.close()
+    return render_template('distributorHome.html');
