@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+!DOCTYPE html>
 <html lang="en">
 
   <head>
@@ -57,8 +57,10 @@
           <h1 class="mx-auto my-0 text-uppercase">Truck it</h1>
           <h2 class="text-white-50 mx-auto mt-2 mb-5">Connecting truck drivers with product distributors</h2>
 		  <a class = "text-white-50 mx-auto mt-2 mb-5">Post a Job</a>
-		  <form>
-		    <a class = "text-white-50 mx-auto mt-2 mb-5">Job Description:<br></a>
+		  <form action="distributor_post" method="POST">
+			<a class = "text-white-50 mx-auto mt-2 mb-5">Job Title:<br></a>
+			<input type = "text" name = "jobTitle"><br>
+		    	<a class = "text-white-50 mx-auto mt-2 mb-5">Job Description:<br></a>
 			<input type = "text" name = "jobDescription"><br>
 			<a class = "text-white-50 mx-auto mt-2 mb-5">Pickup Location:<br></a>
 			<input type = "text" name = "pickupLocation"><br>
@@ -68,10 +70,8 @@
 			<input type = "date" name = "pickupDate"><br>
 			<a class = "text-white-50 mx-auto mt-2 mb-5">Dropoff Date:<br></a>
 			<input type = "date" name = "dropoffDate"><br>
-			<a class = "text-white-50 mx-auto mt-2 mb-5">Freight Type:<br></a>
-			<input type = "text" name = "freightType"><br>
-			<a class = "text-white-50 mx-auto mt-2 mb-5">Freight Weight(Tons):<br></a>
-			<input type = "number" name = "freightWeight"><br><br>
+			<a class = "text-white-50 mx-auto mt-2 mb-5">Delivery Instructions:<br></a>
+			<input type = "text" name = "deliveryInstructions"><br><br>
 			<input type = "submit" class="btn btn-primary js-scroll-trigger" name - "Submit">
 		  </form>
         </div>
