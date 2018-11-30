@@ -37,7 +37,7 @@ def create_account():
     input_user=request.form['inputUsername']
     input_password=request.form['inputPassword']
     role=request.form['userType']
-    conn = mysql.connector.connect(user='cs340_piccirim', password='1946', host='classmysql.engr.oregonstate.edu', database='cs340_piccirim')
+    conn = mysql.connector.connect(user='root', password='nwtx2048', host='127.0.0.1', port='3306', database='sys')
     cur = conn.cursor()
     cur.execute('''INSERT INTO users(email, username, password, role) VALUES(%s,%s, %s, %s)''', (input_email, input_user, input_password, role))
     conn.commit()
@@ -65,6 +65,31 @@ def distributor_post():
     conn.close()
     return render_template('distributorHome.html');
 
+
+
+@app.route("/account_login", methods=['POST'])
+def account_login():
+    get_username = request.form['tryUsername']
+    get_password = request.form['tryPassword']
+    sql = '''SELECT role FROM users WHERE username='%s' AND password='%s' '''% (get_username, get_password)
+    conn = mysql.connector.connect(user='cs340_piccirim', password='1946', host='classmysql.engr.oregonstate.edu', database='cs340_piccirim')
+    cur = conn.cursor()
+    cur.execute(sql)
+    rows_affected = cur.rowcount
+    results = cur.fetchall()
+    conn.commit()
+    cur.close()
+    conn.close()
+    if not results:
+        return render_template('index.html')
+    else:
+        role = results[0][0]
+   
+    if role == 1:
+        return render_template('truckerHome.html')
+    else:
+        return render_template('distributorHome.html')
+    
 @app.route("/view_jobs", methods=['GET', 'POST'])
 def view_jobs():
     #If we wanted to be fancy, we could have this back off and retry a few times if it fails
@@ -82,4 +107,5 @@ def view_jobs():
         return render_template('view_jobs.html', data=data)
     except:
         print("Unable to connect to the database")
+
 
