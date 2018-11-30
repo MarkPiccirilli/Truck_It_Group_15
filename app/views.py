@@ -59,12 +59,12 @@ def distributor_post():
     delivery_instructions=request.form['deliveryInstructions']
     conn = mysql.connector.connect(user='cs340_piccirim', password='1946', host='classmysql.engr.oregonstate.edu', database='cs340_piccirim')
     cur = conn.cursor()
-    cur.execute('''INSERT INTO jobpost(title, description, pickupDate, dropoffDate, pickupLocation, dropoffLocation, deliveryInstructions) VALUES(%s, %s, %s, %s, %s, %s, %s)''', (job_title, job_description, pickup_date, dropoff_date, pickup_location, dropoff_location, delivery_instructions))
-    
+    cur.execute('''INSERT INTO jobpost(title, description, pickupDate, dropoffDate, pickupLocation, dropoffLocation, deliveryInstructions, claimed) VALUES(%s, %s, %s, %s, %s, %s, %s, FALSE)''', (job_title, job_description, pickup_date, dropoff_date, pickup_location, dropoff_location, delivery_instructions))
     conn.commit()
     cur.close()
     conn.close()
     return render_template('distributorHome.html');
+
 
 
 @app.route("/account_login", methods=['POST'])
@@ -90,3 +90,22 @@ def account_login():
     else:
         return render_template('distributorHome.html')
     
+@app.route("/view_jobs", methods=['GET', 'POST'])
+def view_jobs():
+    #If we wanted to be fancy, we could have this back off and retry a few times if it fails
+    try:
+        #https://stackoverflow.com/questions/45558349/flask-display-database-from-python-to-html
+        #For now, just have a static query to show all unclaimed jobs
+        #This can be adjusted with variables and data we collect from the user, ie
+        #"SELECT * FROM job_posts where claimed=" + status + "AND pickup_date=" + todays_date 
+        conn = mysql.connector.connect(user='cs340_piccirim', password='1946', host='classmysql.engr.oregonstate.edu', database='cs340_piccirim')
+        cur = conn.cursor()
+        query="SELECT * FROM jobpost WHERE claimed = FALSE"
+        print("Connection to database successful")
+        cur.execute(query)
+        data = cur.fetchall()
+        return render_template('view_jobs.html', data=data)
+    except:
+        print("Unable to connect to the database")
+
+
